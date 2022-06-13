@@ -1,0 +1,10 @@
+---
+# tasks file for letsencrypt
+- apt:
+    name: [certbot, lsof]
+    state: present
+    update_cache: yes
+- cron:
+    name: "renew letsencrypt certs"
+    hour: "0"
+    job: "certbot -n renew --pre-hook \"kill \\$(lsof -t -i:80 -sTCP:LISTEN)\" --post-hook \"reboot\""
